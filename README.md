@@ -26,3 +26,38 @@ existing Mux artwork. Edit `scripts/social-card.html`, then run
 `public/404.html` is copied to the output root during the build. Cloudflare
 Pages uses it to return HTTP 404 for unknown paths instead of falling back to
 the homepage. Keep this file when changing the build or hosting configuration.
+
+## Local validation
+
+Run `npm ci`, then `npm run build && npm run check` with Chrome installed.
+The check serves built files on an ephemeral loopback port, blocks external
+requests, and covers four viewport widths, keyboard/mouse demo behavior,
+unavailable JavaScript, reduced motion, metadata/download consistency,
+missing-page recovery and the edge proxy. Screenshots and results are written
+to ignored `test-results/`.
+
+See [the QA cases](docs/QA_CASES.md) for coverage and manual acceptance checks.
+Browser tests do not contact devices or prove native hardware behavior. Google
+Fonts is an existing external stylesheet dependency; tests block it and exercise
+fallback fonts.
+
+For cross-engine QA, install the matching test engines with
+`npx playwright install firefox webkit`, then run `npm run check:engines`.
+This tests Chrome plus Playwright Firefox and WebKit, not physical Safari or
+mobile browsers. The 200% text case doubles computed font sizes to check reflow
+independently of viewport or browser zoom.
+
+Run `npm run check:hygiene` for icon decoding, footer keyboard order, contrast,
+and four-width 100%/200% text reflow checks in all three engines.
+For a version/copy-only update, `HYGIENE_SCOPE=release npm run check:hygiene`
+checks the narrowest 320px layout at both text scales.
+
+`npm run check:links` performs read-only HEAD requests to public destinations.
+It sends no credentials and downloads no response bodies.
+
+For a release update, save an actual `gh release view` JSON receipt with
+`tagName,publishedAt,isDraft,url,assets` fields, rebuild, then run
+`npm run check:release -- RECEIPT.json`. Add `--online` to fetch and hash the
+published ZIP against its checksum. This does not install or execute the app.
+The validator rejects drafts, incomplete assets and stale source/build links.
+Run `npm test` for offline publication/error fixtures.

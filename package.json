@@ -3,6 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {"dev": "vite --host 127.0.0.1", "build": "vite build", "preview": "vite preview --host 127.0.0.1"},
-  "devDependencies": {"vite": "8.2.2", "@playwright/test": "1.55.1"}
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "check": "node scripts/check-site.mjs",
+    "check:engines": "npm run check && SITE_ENGINE=firefox npm run check && SITE_ENGINE=webkit npm run check",
+    "check:links": "node scripts/check-links.mjs",
+    "check:hygiene": "node scripts/check-hygiene.mjs",
+    "test": "node --test scripts/check-release.test.mjs",
+    "check:release": "node scripts/check-release.mjs"
+  },
+  "devDependencies": {
+    "vite": "8.2.2",
+    "@playwright/test": "1.55.1"
+  }
 }

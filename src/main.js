@@ -11,3 +11,7 @@ for (const screen of screens) {
     document.querySelector('#demo-status').textContent = `Input is on ${screen.dataset.mac === 'studio' ? 'Mac Studio' : 'MacBook'}`;
   });
 }
+
+// Enable the illustrative controls only after their handlers are installed.
+for (const screen of screens) screen.disabled = false;
+document.querySelector('#demo-help').textContent = 'Select either screen to try the flow ↗';
